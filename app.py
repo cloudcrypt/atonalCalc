@@ -19,7 +19,7 @@ def index():
 @app.route("/analyse", methods=['GET'])
 def analyse():
 	set = request.args.get('set')
-	if isToneRow(set):
+	if isToneRow(str(set)):
 		analysedSet = toneRow(set)
 		return render_template("row.html", row=analysedSet)
 	
@@ -27,6 +27,7 @@ def analyse():
 	return render_template("set.html", set=analysedSet)
 	
 def isToneRow(set):
+	print set
 	intlist = []
 	if " " not in set:
 		chordlist = [ note for note in set ]

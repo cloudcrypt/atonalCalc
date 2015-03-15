@@ -33,13 +33,22 @@
 	</h4>
 	{% if row.isSymmetrical %}
 	<h3>
-		Row is Symmetrical.
+		Row <strong>is</strong> Symmetrical.
 	</h3>
 	{% else %}
 	<h3>
-		Row is not Symmetrical.
+		Row <strong>is not</strong> Symmetrical.
 	</h3>
-	{% endif %}	
+	{% endif %}
+	{% if row.isAllInterval %}
+	<h3>
+		Row <strong>is</strong> All-Interval.
+	</h3>
+	{% else %}
+	<h3>
+		Row <strong>is not</strong> All-Interval.
+	</h3>
+	{% endif %}		
 	{% if row.triDerived %}
 	<h3>
 		Row is derived of the following discrete subset:
@@ -90,7 +99,7 @@
 	
 	<form role="form" action="/analyse" method="GET">
 		<div class="form-group">
-	 <label>Set/Tone Row:</label><input class="form-control" id="row" name="row" type="text" placeholder="0123456789TE">
+	 <label>Set/Tone Row:</label><input class="form-control" id="set" name="set" type="text" placeholder="0123456789TE">
 	 <br/>
 	 <button class="btn btn-success" type="submit">Analyse</button>
 	 <br/>			 

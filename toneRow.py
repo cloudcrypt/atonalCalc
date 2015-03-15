@@ -42,7 +42,7 @@ class toneRow(pitchSet):
 	isAllInterval = True
 	
 	def __init__(self, userString, debug=False):
-		print "init"
+		
 		self.debug = debug
 		self.userSet = userString
 		self.process_set()
@@ -88,7 +88,7 @@ class toneRow(pitchSet):
 			
 		for number in [1,2,3,4,5,6,7,8,9,10,11]:
 			if number not in self.rowAISList:
-				isAllInterval = False
+				self.isAllInterval = False
 		
 		
 		
@@ -121,4 +121,9 @@ if __name__ == "__main__":
 	inputString = raw_input("Please enter chord notes or numbers separated by spaces:")
 	set = toneRow(inputString)
 	set.display()
+	print set.__dict__
+	print set.isAllInterval
+	print set.isSymmetrical
+	print set.triDerived
+	print set.tetraDerived
 	
