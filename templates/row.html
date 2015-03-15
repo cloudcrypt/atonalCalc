@@ -7,6 +7,8 @@
 			Analysis of {{ row.rowList }} <small>(Entered as: "{{ row.userSet }}")</small>
 		</h1>
 	</div>
+<div class="row clearfix">
+	<div class="col-md-6 column">	
 	<h3>
 		Row:
 	</h3>
@@ -85,18 +87,59 @@
 		<br>		
 		IV:  {{ row.hexBIVString }}
 	</h4>	
-
+	</div>
+	<div class="col-md-6 column">
+	<h3>
+		Matrix:
+	</h3>
+	<table class="table">
+		<thead>
+			<tr>
+				<th></th>
+				<th>I</th>
+				<th>I</th>
+				<th>I</th>
+				<th>I</th>
+				<th>I</th>
+				<th>I</th>
+				<th>I</th>
+				<th>I</th>
+				<th>I</th>
+				<th>I</th>
+				<th>I</th>
+				<th>I</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for row in row.matrix %}
+			<tr>
+				<td><strong>P</strong></td>
+				{% for element in row %}
+				<td>{{ element }}</td>
+				{% endfor %}
+			</tr>
+		{% endfor %}
 		
-
-	
-	<div class="page-header">
+		</tbody>
+	</table>	
+	<h3>
+		Perform transformation on P0:
+	</h3>	
+	<form role="form" action="/transform" method="GET">
+		<div class="form-group">
+	 <label>Transformation:</label><input class="form-control" id="transformation" name="transformation" type="text" placeholder="P5">
+	 <br/>
+	 <button class="btn btn-success" type="submit">Transform</button>
+	 <br/>			 
+	</div>		
+	</form>	
+	</div>
+</div>
+<div class="page-header">
 		<h3>
 			Analyse another set or row:
 		</h3>
 	</div>	
-	
-	
-	
 	<form role="form" action="/analyse" method="GET">
 		<div class="form-group">
 	 <label>Set/Tone Row:</label><input class="form-control" id="set" name="set" type="text" placeholder="0123456789TE">
