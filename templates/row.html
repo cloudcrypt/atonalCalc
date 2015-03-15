@@ -1,0 +1,106 @@
+{% extends "template.html" %}
+
+
+{% block body %}
+	<div class="page-header">
+		<h1>
+			Analysis of {{ row.rowList }} <small>(Entered as: "{{ row.userSet }}")</small>
+		</h1>
+	</div>
+	<h3>
+		Row:
+	</h3>
+	<h4>
+		{{ row.rowList }}
+	</h4>	
+	<h3>
+		Adjacent Interval Series:
+	</h3>
+	<h4>
+		{{ row.rowAISString }}
+	</h4>	
+	<h3>
+		Discrete Sub-Trichords:
+	</h3>
+	<h4>
+		{{ row.subTriChord1PrimeString }} -- {{ row.subTriChord2PrimeString }} -- {{ row.subTriChord3PrimeString }} -- {{ row.subTriChord4PrimeString }}
+	</h4>	
+	<h3>
+		Discrete Sub-Tetrachords:
+	</h3>
+	<h4>
+		{{ row.subTetraChord1PrimeString }} ----- {{ row.subTetraChord2PrimeString }} ----- {{ row.subTetraChord3PrimeString }}
+	</h4>
+	{% if row.isSymmetrical %}
+	<h3>
+		Row is Symmetrical.
+	</h3>
+	{% else %}
+	<h3>
+		Row is not Symmetrical.
+	</h3>
+	{% endif %}	
+	{% if row.triDerived %}
+	<h3>
+		Row is derived of the following discrete subset:
+	</h3>
+	<h4>
+		{{ row.subTriChord1PrimeString }}
+	</h4>
+	{% endif %}
+	{% if row.tetraDerived %}
+	<h3>
+		Row is derived of the following discrete subset:
+	</h3>
+	<h4>
+		{{ row.subTetraChord1PrimeString }}
+	</h4>
+	{% endif %}
+	<h3>
+		Hexachord A:
+	</h3>
+	<h4>
+		Set: {{ row.hexA }}
+		<br>
+		ICV: {{ row.hexAICVString }}
+		<br>		
+		IV:  {{ row.hexAIVString }}
+	</h4>
+	<h3>
+		Hexachord B:
+	</h3>
+	<h4>
+		Set: {{ row.hexB }}
+		<br>
+		ICV: {{ row.hexBICVString }}
+		<br>		
+		IV:  {{ row.hexBIVString }}
+	</h4>	
+
+		
+
+	
+	<div class="page-header">
+		<h3>
+			Analyse another set or row:
+		</h3>
+	</div>	
+	
+	
+	
+	<form role="form" action="/analyse" method="GET">
+		<div class="form-group">
+	 <label>Set/Tone Row:</label><input class="form-control" id="row" name="row" type="text" placeholder="0123456789TE">
+	 <br/>
+	 <button class="btn btn-success" type="submit">Analyse</button>
+	 <br/>			 
+	</div>		
+	</form>	
+	
+	
+	
+
+{% endblock %}
+	
+	
+	

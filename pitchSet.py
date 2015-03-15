@@ -40,8 +40,8 @@ class pitchSet:
 	
 	matrix = []
 	rowList = []
-	hex1 = []
-	hex2 = []
+	hexA = []
+	hexB = []
 	
 	
 	
@@ -59,16 +59,16 @@ class pitchSet:
 			(self.primeList, self.primeString) = self.primeForm(self.normalorder, self.aisList)
 			#self.primeForm()
 			self.forteName = fortenames.getName(self.primeList)
+			(self.icvList, self.icvString) = self.intervalClassVector(self.primeList)
+			#self.intervalClassVector()
+			(self.ivList, self.ivString) = self.indexVector(self.primeList)
+			#self.indexVector()
 			
-			# to fix!!!
-			self.intervalClassVector()
-			self.indexVector()
-			#
 			
 		elif self.isToneRow:
 			self.rowList = self.intlist
-			self.hex1 = self.intlist[:6]
-			self.hex2 = self.intlist[6:]
+			self.hexA = self.intlist[:6]
+			self.hexB = self.intlist[6:]
 			self.createMatrixList()
 			self.adjIntSeries(intlist=self.rowList)
 		
@@ -110,8 +110,22 @@ class pitchSet:
 			n += 1
 		if self.debug: print("***Possible Rotations: %s***"%str(list_of_intlists))
 		return list_of_intlists
+	
+	@staticmethod
+	def staticRotate(intlist):
+		if debug: print("***Intlist: %s***"%str(intlist))
+		sorted_intlist = sorted(intlist)
+		if debug: print("***Sorted Intlist: %s***"%str(sorted_intlist))
+		n = 0
+		list_of_intlists = []
+		while n < len(sorted_intlist):
+			list_of_intlists.append(sorted_intlist[n:] + sorted_intlist[:n])
+			n += 1
+		if debug: print("***Possible Rotations: %s***"%str(list_of_intlists))
+		return list_of_intlists		
 
-	def convertNO(self, list_of_intlists):
+	@staticmethod	
+	def convertNO(list_of_intlists):
 		#rotations = set([ variant for variant in permutations(intlist) ])
 		minim = 100
 		smallest = []
@@ -123,47 +137,60 @@ class pitchSet:
 			#	distance = (12 - first) + last
 			#else:
 			#	distance = last - first
-			if self.debug: print("***Min Dist Value: %d***"%minim)
-			if self.debug: print("***Rotation: %s, Distance: %d***"%(str(variant),distance))
+			if debug: print("***Min Dist Value: %d***"%minim)
+			if debug: print("***Rotation: %s, Distance: %d***"%(str(variant),distance))
 			if distance < minim:
-				if self.debug: print("***Distance is less than min!***")
+				if debug: print("***Distance is less than min!***")
 				minim = distance
 				del smallest
 				smallest = []
 				smallest.append(variant)
-				if self.debug: print("***Smallest: %s***"%str(smallest))
+				if debug: print("***Smallest: %s***"%str(smallest))
 			elif distance == minim:
-				if self.debug: print("***Distance is equal to min!***")
+				if debug: print("***Distance is equal to min!***")
 				if variant not in smallest:
-					if self.debug: print("***Rotation was not in Smallest list***")
+					if debug: print("***Rotation was not in Smallest list***")
 					smallest.append(variant)
-					if self.debug: print("***Smallest: %s***"%str(smallest))
+					if debug: print("***Smallest: %s***"%str(smallest))
 			else:
-				if self.debug: print("***Distance is NOT less than min***")
+				if debug: print("***Distance is NOT less than min***")
 		if len(smallest) > 1:
-			if self.debug: print("***There are multiple smallest results!***")
-			if self.debug: print("***Smallest: %s***"%str(smallest))
+			if debug: print("***There are multiple smallest results!***")
+			if debug: print("***Smallest: %s***"%str(smallest))
 			# compare = {}
 			# for option in smallest:
 				# distance = (option[len(option)-2] - option[0]) % 12
 				# compare[repr(option)] = distance
-				# if self.debug: print("***Current Option: %s, Distance: %d***"%(str(option),distance))
-			# if self.debug: print("***Comparison Results: %s***"%str(compare))
+				# if debug: print("***Current Option: %s, Distance: %d***"%(str(option),distance))
+			# if debug: print("***Comparison Results: %s***"%str(compare))
 			n = -1
 			while True:
-				compare = detailCompare(smallest, n)
+				compare = pitchSet.detailCompare(smallest, n)
 				if len(list(compare.values())) == len(set(list(compare.values()))):
-					if self.debug: print("***There are NO distance duplicates!***")
+					if debug: print("***There are NO distance duplicates!***")
 					break
 				else:
-					if self.debug: print("***There are still distance duplicates!***")
+					if debug: print("***There are still distance duplicates!***")
 				n -= 1
 				if n == -(len(list_of_intlists[0])-1):
-					if self.debug: print("***Last comparison detail index has been reached! Aborting detailCompare***")
+					if debug: print("***Last comparison detail index has been reached! Aborting detailCompare***")
 					break		
 			return eval(min(compare, key=compare.get))
-		if self.debug: print("***There is only one result!***")
+		if debug: print("***There is only one result!***")
 		return smallest[0]
+	
+	@staticmethod
+	def detailCompare(list, n):
+		if debug: print("***Detailed Comparison is Needed!***")
+		if debug: print("***Index of comparison detail: %d***"%n)
+		if debug: print("***Rotations to compare: %s***"%str(list))
+		compare = {}
+		for option in list:
+			distance = (option[len(option)-1+n] - option[0]) % 12
+			compare[repr(option)] = distance
+			if debug: print("***Current Option: %s, Distance: %d***"%(str(option),distance))
+		if debug: print("***Comparison Results: %s***"%str(compare))
+		return compare		
 	
 	@staticmethod
 	def adjIntSeries(intlist):
@@ -235,21 +262,21 @@ class pitchSet:
 		return (prime_list, result_string)
 		
 
-		
-	def intervalClassVector(self):
-		if self.debug: print("***ICV Creation Start***")
-		length = len(self.primeList)
+	@staticmethod
+	def intervalClassVector(primeList):
+		if debug: print("***ICV Creation Start***")
+		length = len(primeList)
 		result = [0,0,0,0,0,0]
 		occurrences = []
 		n = 0
 		while True:
-			for number in self.primeList[(n+1):]:
-				if self.debug: print("***Processing %d - %d ***"%(number,self.primeList[n]))
-				occurrences.append(number - self.primeList[n])
+			for number in primeList[(n+1):]:
+				if debug: print("***Processing %d - %d ***"%(number,primeList[n]))
+				occurrences.append(number - primeList[n])
 			n += 1
-			if n == len(self.primeList)-1:
+			if n == len(primeList)-1:
 				break
-		if self.debug: print("***Occurrences: %s***"%str(occurrences))
+		if debug: print("***Occurrences: %s***"%str(occurrences))
 		k = 1
 		while k <= 6:
 			for number in occurrences:
@@ -260,30 +287,30 @@ class pitchSet:
 		for number in result:
 			result_string += str(number)
 		result_string += "]"
-		self.icvString = result_string
-		self.icvList = result
-		return
+		#self.icvString = result_string
+		#self.icvList = result
+		return (result, result_string)
 			
-			
-	def indexVector(self):
-		if self.debug: print("***IV Creation Start***")
+	@staticmethod		
+	def indexVector(primeList):
+		if debug: print("***IV Creation Start***")
 		occurrences = []
 		result = [0,0,0,0,0,0,0,0,0,0,0,0]
-		for number in self.primeList:
-			for number2 in self.primeList:
-				if self.debug: print("***Processing %d + %d ***"%(number,number2))
-				if self.debug: print("***Result: %d***"%((number2+number)%12))
+		for number in primeList:
+			for number2 in primeList:
+				if debug: print("***Processing %d + %d ***"%(number,number2))
+				if debug: print("***Result: %d***"%((number2+number)%12))
 				occurrences.append((number2+number)%12)
-		if self.debug: print("***Occurrences: %s***"%str(occurrences))
+		if debug: print("***Occurrences: %s***"%str(occurrences))
 		for number in occurrences:
 			result[number] += 1
 		result_string = "<"
 		for number in result:
 			result_string += str(number)
 		result_string += ">"
-		self.ivString = result_string
-		self.ivList = result
-		return
+		#self.ivString = result_string
+		#self.ivList = result
+		return (result, result_string)
 		
 	def createMatrixList(self):
 		matrix = []

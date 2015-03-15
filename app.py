@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, url_for, make_response, session, redirect, g, flash
 from pitchSet import *
+from toneRow import *
 #import psycopg2, sqlite3, bcrypt
 #from random import randint
 
@@ -19,7 +20,8 @@ def index():
 def analyse():
 	set = request.args.get('set')
 	if isToneRow(set):
-		return set + " implementation of tone row analysis in progress"
+		analysedSet = toneRow(set)
+		return render_template("row.html", row=analysedSet)
 	
 	analysedSet = pitchSet(set)
 	return render_template("set.html", set=analysedSet)
