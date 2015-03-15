@@ -1,0 +1,37 @@
+{% extends "template.html" %}
+
+
+{% block body %}
+			<div class="page-header">
+				<h1>
+					Enter a pitch-class set or tone row to analyse: <small></small>
+				</h1>
+			</div>
+			<form role="form" action="/analyse" method="GET">
+				<div class="form-group">
+					 <label>Set/Tone Row:</label><input class="form-control" id="set" name="set" type="text" placeholder="0123456789TE">
+					 <br/>
+					 <button class="btn btn-success" type="submit">Analyse</button>
+					 <br/>
+					 <p class="help-block">
+						Input is case-insensitive.
+						</br>
+						The '-' symbol immediately following a note letter denotes a flat.
+						</br>
+						The '+' symbol immediately following a note letter denotes a sharp.
+						<br/>
+						Accepted forms of input include:
+						<ul class="list-group">
+						  <li class="list-group-item active">012345</li>
+						  <li class="list-group-item">0123TE</li>
+						  <li class="list-group-item">0 1 2 3 10 11</li>
+						  <li class="list-group-item">0 1 2 3 T E</li>
+						  <li class="list-group-item">a b- c+ d e- g f</li>
+						</ul>
+					</p>
+				</div>
+				<!--<div class="checkbox">
+					 <label><input type="checkbox"> Check me out</label>
+				</div>--> <!--<button class="btn btn-success" type="submit">Analyse</button>-->
+			</form>
+{% endblock %}
