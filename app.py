@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, url_for, make_response, session, redirect, g, flash
+import transformer
 from pitchSet import *
 from toneRow import *
 #import psycopg2, sqlite3, bcrypt
@@ -7,7 +8,7 @@ from toneRow import *
 #DATABASE = 'postgres://wzixescuopzqdc:r3zTn8Hsuso1rfdzdX1mQ2M2ty@ec2-54-235-193-41.compute-1.amazonaws.com:5432/de5augokmm67pb'
 app = Flask(__name__)
 #app.config.from_object(__name__)
-# ######## need to regenerate! app.secret_key = '\x80\x0e.\x97\xd4\xc0\x8a\xef@\xf4O\xd6w\x04V\x04[\xdf\x01dP\x9b\x07\x17'
+app.secret_key = '\xdc\xae\xd5\xce\x9a\x83\x8d\xe1\x0e\xe7K>\xc5O\x18\xa0\r6\x87=\xf8\xe3<\x88'
 
 
 
@@ -21,13 +22,40 @@ def analyse():
 	set = request.args.get('set')
 	if isToneRow(str(set)):
 		analysedSet = toneRow(set)
+		if 'current_set' in session: session.pop('current_set')
+		session['current_set'] = analysedSet.rowList
 		return render_template("row.html", row=analysedSet)
 	
 	analysedSet = pitchSet(set)
+	if 'current_set' in session: session.pop('current_set')
+	session['current_set'] = analysedSet.intlist
 	return render_template("set.html", set=analysedSet)
 	
+@app.route("/transform", methods=['GET'])
+def transform():
+	userTransformation = request.args.get('transformation')
+	return transformer.performOperation(userTransformation, session['current_set'])
+	
+@app.route('/session')
+def viewSession():
+    data = {}
+    for item in session:
+        data[item] = session[item]
+    #return jsonify(**data)
+    return str(data)
+	
+@app.route('/sessionclear')
+def clearSession():
+    sessionData = []
+    for item in session:
+        sessionData.append(item)
+    for item in sessionData:
+        session.pop(item)
+    return "// Session has been cleared //"
+	
+	
+	
 def isToneRow(set):
-	print set
 	intlist = []
 	if " " not in set:
 		chordlist = [ note for note in set ]

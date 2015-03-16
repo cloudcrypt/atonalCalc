@@ -125,14 +125,19 @@
 	<h3>
 		Perform transformation on P0:
 	</h3>	
-	<form role="form" action="/transform" method="GET">
+	
+	<!-- <form> role="form" action="/transform" method="GET"-->
 		<div class="form-group">
-	 <label>Transformation:</label><input class="form-control" id="transformation" name="transformation" type="text" placeholder="P5">
+	 <label>Transformation:</label><input class="form-control" id="transformation" name="transformation" type="text" placeholder="P5" onkeydown="if (event.keyCode == 13) document.getElementById('transformButton').click()">
+	 <!--
 	 <br/>
-	 <button class="btn btn-success" type="submit">Transform</button>
-	 <br/>			 
+	 <button class="btn btn-success myButton">Transform</button>
+	 <br/>
+	 -->
 	</div>		
-	</form>	
+	<!-- </form> -->
+	<button class="btn btn-success myButton" id="transformButton">Transform</button>
+<div class="getResponse"></div>	
 	</div>
 </div>
 <div class="page-header">
@@ -140,15 +145,57 @@
 			Analyse another set or row:
 		</h3>
 	</div>	
-	<form role="form" action="/analyse" method="GET">
-		<div class="form-group">
-	 <label>Set/Tone Row:</label><input class="form-control" id="set" name="set" type="text" placeholder="0123456789TE">
-	 <br/>
-	 <button class="btn btn-success" type="submit">Analyse</button>
-	 <br/>			 
-	</div>		
-	</form>	
 	
+	<!-- <form role="form" action="/analyse" method="GET"> -->
+		<div class="form-group"> 
+	 <label>Set/Tone Row:</label><input class="form-control" id="set" name="set" type="text" placeholder="0123456789TE" onkeydown="if (event.keyCode == 13) document.getElementById('analyseButton').click()">
+	 
+	 <br/>
+		<button class="btn btn-success analyseButton" id="analyseButton">Analyse</button>
+	 <br/>
+	</div>
+		
+	<!-- </form> -->
+
+
+
+	
+<script>
+//Listen when a button, with a class of "myButton", is clicked
+//You can use any jQuery/JavaScript event that you'd like to trigger the call
+$('.myButton').click(function() {
+//Send the AJAX call to the server
+  $.ajax({
+  //The URL to process the request
+    'url' : '/transform',
+  //The type of request, also known as the "method" in HTML forms
+  //Can be 'GET' or 'POST'
+    'type' : 'GET',
+  //Any post-data/get-data parameters
+  //This is optional
+    'data' : {
+      'transformation' : document.getElementById('transformation').value ,
+      
+    },
+  //The response from the server
+    'success' : function(data) {
+    //You can use any jQuery/JavaScript here!!!
+      if (data != "fail") {
+		var string = "<h4>" + data + "</h4>"
+		$(".getResponse").append(string);
+      }
+    }
+  });
+});	
+</script>
+
+<script>
+$('.analyseButton').click(function() {
+	var url = "/analyse?set=" + document.getElementById('set').value;
+	window.location.href = url;
+	
+});
+</script>
 	
 	
 
