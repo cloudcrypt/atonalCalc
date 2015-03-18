@@ -20,15 +20,23 @@ def index():
 @app.route("/analyse", methods=['GET'])
 def analyse():
 	set = request.args.get('set')
-	if isToneRow(str(set)):
-		analysedSet = toneRow(set)
-		if 'current_set' in session: session.pop('current_set')
-		session['current_set'] = analysedSet.rowList
-		return render_template("row.html", row=analysedSet)
-	
+	try:
+		if isToneRow(str(set)):
+			analysedSet = toneRow(set)
+			if 'current_set' in session: session.pop('current_set')
+			session['current_set'] = analysedSet.rowList
+			processHistory(set)
+			return render_template("row.html", row=analysedSet)
+	except InvalidInputError as e:
+		if e.hasmsg:
+			flash(e.msg)
+		else:
+			flash("Error: Invalid Input. Please follow input guidelines.")
+		return render_template("home.html", flashType="danger")
 	analysedSet = pitchSet(set)
 	if 'current_set' in session: session.pop('current_set')
 	session['current_set'] = analysedSet.intlist
+	processHistory(set)
 	return render_template("set.html", set=analysedSet)
 	
 @app.route("/transform", methods=['GET'])
@@ -53,19 +61,41 @@ def clearSession():
         session.pop(item)
     return "// Session has been cleared //"
 	
+@app.route('/clearhistory')
+def clearHistory():
+	session.pop('history')
+	flash("History has been cleared.")
+	return render_template("home.html", flashType="success")
 	
 	
-def isToneRow(set):
-	intlist = []
-	if " " not in set:
-		chordlist = [ note for note in set ]
+	
+def processHistory(set):
+	if 'history' not in session:
+		session['history'] = []
+	if set in session['history']:
+		return
 	else:
-		chordlist = [ note.lower() for note in set.split(' ') ]
+		session['history'].append(set)
+		return
+	
+	
+	
+def isToneRow(inputSet):
+	if len(inputSet) == 1:
+		raise InvalidInputError
+	intlist = []
+	if " " not in inputSet:
+		chordlist = [ note for note in inputSet ]
+	else:
+		chordlist = [ note.lower() for note in inputSet.split(' ') ]
 	try:
 		int(chordlist[0])
 	except ValueError:
 		for note in chordlist:
-			intlist.append(pitchSet.note_int_mappings[note])
+			try:
+				intlist.append(pitchSet.note_int_mappings[note])
+			except KeyError:
+				raise InvalidInputError
 	else:
 		templist = []
 		for element in chordlist:
@@ -76,10 +106,20 @@ def isToneRow(set):
 			else:
 				templist.append(element)
 		intlist = [ int(item) for item in templist ]
+	if len(intlist) != len(set(intlist)):
+		raise InvalidInputError(msg="Error: There cannot be duplicate notes in the set.")
 	if len(intlist) == 12:
 		return True
 	else:
 		return False
+		
+class InvalidInputError(Exception):
+	def __init__(self, msg=None):
+		if msg != None:
+			self.msg = msg
+			self.hasmsg = True
+		else:
+			self.hasmsg = False
 
 if __name__ == '__main__':
     app.run(debug=True)
