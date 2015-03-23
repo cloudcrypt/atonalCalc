@@ -19,6 +19,10 @@ def index():
 @app.route("/analyse", methods=['GET'])
 def analyse():
     set = request.args.get('set')
+    if "," in set:
+        userSets = [element.strip() for element in set.split(',')]
+        analysedSets = [pitchSet(element) for element in userSets]
+        return render_template("multipleset.html", sets=analysedSets)
     try:
         if isToneRow(str(set)):
             analysedSet = toneRow(set)
@@ -33,7 +37,8 @@ def analyse():
             flash("Error: Invalid Input. Please follow input guidelines.")
         return render_template("home.html", flashType="danger")
     analysedSet = pitchSet(set)
-    if 'current_set' in session: session.pop('current_set')
+    if 'current_set' in session:
+        session.pop('current_set')
     session['current_set'] = analysedSet.intlist
     processHistory(set)
     return render_template("set.html", set=analysedSet)
