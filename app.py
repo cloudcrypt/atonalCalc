@@ -22,6 +22,8 @@ def analyse():
     if "," in set:
         userSets = [element.strip() for element in set.split(',')]
         analysedSets = [pitchSet(element) for element in userSets]
+        session['current_set'] = [analysedSet.intlist for analysedSet in analysedSets]
+        processHistory(set)
         return render_template("multipleset.html", sets=analysedSets)
     try:
         if isToneRow(str(set)):

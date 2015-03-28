@@ -25,6 +25,34 @@ class pitchSet:
     'b-': 10,
     'b': 11
     }
+    int_note_mappings_1 = {
+    0 : 'c',
+    1 : 'c+',
+    2 : 'd',
+    3 : 'd+',
+    4 : 'e',
+    5 : 'f',
+    6 : 'f+',
+    7 : 'g',
+    8 : 'g+',
+    9 : 'a',
+    10 : 'a+',
+    11 : 'b'
+    }
+    int_note_mappings_2 = {
+    0 : 'c',
+    1 : 'd-',
+    2 : 'd',
+    3 : 'e-',
+    4 : 'e',
+    5 : 'f',
+    6 : 'g-',
+    7 : 'g',
+    8 : 'a-',
+    9 : 'a',
+    10 : 'b-',
+    11 : 'b'
+    }
     userSet = ""  # from constructor
     chordlist = []  # from process_set
     intlist = []  # from process_set

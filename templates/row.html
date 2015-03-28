@@ -92,6 +92,14 @@
 	<h3>
 		Matrix:
 	</h3>
+
+	<ul class="nav nav-pills">
+	  <li role="presentation" class="active"><a data-toggle="tab" href="#intform">Integer Form</a></li>
+	  <li role="presentation"><a data-toggle="tab" href="#notename1">Pitch Name Form 1</a></li>
+      <li role="presentation"><a data-toggle="tab" href="#notename2">Pitch Name Form 2</a></li>
+	</ul>
+    <div class="tab-content">
+    <div id=intform class="form-group tab-pane fade in active">
 	<table class="table">
 		<thead>
 			<tr>
@@ -121,7 +129,73 @@
 		{% endfor %}
 		
 		</tbody>
-	</table>	
+	</table>
+    </div>
+    <div id=notename1 class="form-group tab-pane fade">
+	<table class="table">
+		<thead>
+			<tr>
+				<th></th>
+				<th>I</th>
+				<th>I</th>
+				<th>I</th>
+				<th>I</th>
+				<th>I</th>
+				<th>I</th>
+				<th>I</th>
+				<th>I</th>
+				<th>I</th>
+				<th>I</th>
+				<th>I</th>
+				<th>I</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for row in row.matrixNote1 %}
+			<tr>
+				<td><strong>P</strong></td>
+				{% for element in row %}
+				<td>{{ element }}</td>
+				{% endfor %}
+			</tr>
+		{% endfor %}
+
+		</tbody>
+	</table>
+    </div>
+    <div id=notename2 class="form-group tab-pane fade">
+	<table class="table">
+		<thead>
+			<tr>
+				<th></th>
+				<th>I</th>
+				<th>I</th>
+				<th>I</th>
+				<th>I</th>
+				<th>I</th>
+				<th>I</th>
+				<th>I</th>
+				<th>I</th>
+				<th>I</th>
+				<th>I</th>
+				<th>I</th>
+				<th>I</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for row in row.matrixNote2 %}
+			<tr>
+				<td><strong>P</strong></td>
+				{% for element in row %}
+				<td>{{ element }}</td>
+				{% endfor %}
+			</tr>
+		{% endfor %}
+
+		</tbody>
+	</table>
+    </div>
+    </div>
 	<h3>
 		Perform transformation on P0:
 	</h3>	
