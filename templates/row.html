@@ -255,8 +255,14 @@ $('.myButton').click(function() {
     'success' : function(data) {
     //You can use any jQuery/JavaScript here!!!
       if (data != "fail") {
-		var string = "<h4>" + data + "</h4>"
-		$(".getResponse").append(string);
+		//var string = "<h4>" + data + "</h4>"
+        //alert(JSON.stringify(data));
+        var string1 = "<h4>" + data.list[0] + "</h4>";
+        var string2 = "<h4>" + data.list[1] + "</h4>";
+        var string3 = "<h4>" + data.list[2] + "</h4>";
+		$(".getResponse").append(string1);
+        $(".getResponse").append(string2);
+        $(".getResponse").append(string3);
       }
     }
   });
