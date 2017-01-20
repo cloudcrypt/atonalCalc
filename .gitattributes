@@ -1,2 +1,4 @@
+static/css/* linguist-vendored
 static/less/* linguist-vendored
+static/fonts/* linguist-vendored
 .idea/* linguist-vendored
