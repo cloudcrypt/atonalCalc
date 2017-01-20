@@ -2,3 +2,6 @@ venv
 *.pyc
 staticfiles
 .env
+.idea/workspace.xml
+.idea/tasks.xml
+

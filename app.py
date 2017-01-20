@@ -2,12 +2,8 @@ from flask import Flask, render_template, request, url_for, make_response, sessi
 import transformer
 from pitchSet import *
 from toneRow import *
-# import psycopg2, sqlite3, bcrypt
-# from random import randint
 
-# DATABASE = 'postgres://wzixescuopzqdc:r3zTn8Hsuso1rfdzdX1mQ2M2ty@ec2-54-235-193-41.compute-1.amazonaws.com:5432/de5augokmm67pb'
 app = Flask(__name__)
-# app.config.from_object(__name__)
 app.secret_key = '\xdc\xae\xd5\xce\x9a\x83\x8d\xe1\x0e\xe7K>\xc5O\x18\xa0\r6\x87=\xf8\xe3<\x88'
 
 
